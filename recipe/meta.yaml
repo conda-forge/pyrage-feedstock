@@ -1,5 +1,5 @@
 {% set name = "pyrage" %}
-{% set version = "1.2.2" %}
+{% set version = "1.2.3" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/pyrage-{{ version }}.tar.gz
-  sha256: 82cb97b95516ab6d4c305e55ab8a2efe587ab7e4b8cc687aa9c3db7e10123ff5
+  sha256: a8a1267edb962d13a1db1e0f8e03249568c6eab1d109a4d83b2d5a1c8613c98b
 
 build:
   number: 0

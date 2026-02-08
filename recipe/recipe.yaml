@@ -1,0 +1,58 @@
+schema_version: 1
+
+context:
+  name: pyrage
+  version: 1.2.5
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/pyrage-${{ version }}.tar.gz
+  sha256: b4da11d6fe5265b3e1d98c45afeadcdb89e2ac5072697e102262a2ab9f791918
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - if: build_platform != target_platform
+      then: python
+    - if: build_platform != target_platform
+      then: cross-python_${{ target_platform }}
+    - if: build_platform != target_platform
+      then: maturin >=0.14,<0.15
+    - ${{ compiler('rust') }}
+    - ${{ compiler('c') }}
+    - ${{ stdlib("c") }}
+    - cargo-bundle-licenses
+  host:
+    - python
+    - maturin >=0.14,<0.15
+    - pip
+  run:
+    - python
+
+tests:
+  - python:
+      imports:
+        - pyrage
+  - requirements:
+      run:
+        - pip
+    script:
+      - pip check
+
+about:
+  summary: Python bindings for rage (age in Rust)
+  license: MIT
+  license_file:
+    - LICENSE
+    - pyrage-stubs/LICENSE
+    - THIRDPARTY.yml
+  homepage: https://github.com/woodruffw/pyrage
+
+extra:
+  recipe-maintainers:
+    - pavelzw

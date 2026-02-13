@@ -13,23 +13,22 @@ source:
   sha256: b4da11d6fe5265b3e1d98c45afeadcdb89e2ac5072697e102262a2ab9f791918
 
 build:
-  number: 1
+  number: 2
 
 requirements:
   build:
     - if: build_platform != target_platform
-      then: python
-    - if: build_platform != target_platform
-      then: cross-python_${{ target_platform }}
-    - if: build_platform != target_platform
-      then: maturin >=0.14,<0.15
+      then:
+        - python
+        - cross-python_${{ target_platform }}
+        - maturin >=0.14,<0.15
     - ${{ compiler('rust') }}
     - ${{ compiler('c') }}
     - ${{ stdlib("c") }}
     - cargo-bundle-licenses
   host:
     - python
-    - maturin >=0.14,<0.15
+    - maturin >=1.0,<2.0
     - pip
   run:
     - python

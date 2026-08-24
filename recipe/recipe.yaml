@@ -1,19 +1,28 @@
 schema_version: 1
 
 context:
-  name: pyrage
   version: "1.4.0"
 
 package:
-  name: ${{ name|lower }}
+  name: pyrage
   version: ${{ version }}
 
 source:
-  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/pyrage-${{ version }}.tar.gz
+  url: https://pypi.org/packages/source/p/pyrage/pyrage-${{ version }}.tar.gz
   sha256: 545bf188e8d217ec88c32bc8e8bf56026c8c0b1b1f96d2688cedf1427ab0e827
 
 build:
-  number: 0
+  number: 1
+  skip: is_abi3 and not is_python_min
+  python:
+    version_independent: ${{ is_abi3 }}
+  script:
+    env:
+      CARGO_PROFILE_RELEASE_STRIP: symbols
+      CARGO_PROFILE_RELEASE_LTO: fat
+    content:
+      - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+      - python -m pip install . --no-deps --ignore-installed -vv --no-build-isolation --disable-pip-version-check
 
 requirements:
   build:
@@ -30,6 +39,8 @@ requirements:
     - python
     - maturin >=1.0,<2.0
     - pip
+    - if: is_abi3
+      then: python-abi3
   run:
     - python
 
@@ -37,11 +48,19 @@ tests:
   - python:
       imports:
         - pyrage
-  - requirements:
-      run:
-        - pip
-    script:
-      - pip check
+      python_version:
+        - ${{ python_min }}.*
+        - '*'
+      pip_check: true
+  - if: is_abi3
+    then:
+      script:
+        - if: win
+          then: abi3audit %SP_DIR%/pyrage/pyrage.pyd -s -v --assume-minimum-abi3 ${{ python_min }}
+          else: abi3audit $SP_DIR/pyrage/pyrage.abi3.so -s -v --assume-minimum-abi3 ${{ python_min }}
+      requirements:
+        run:
+          - abi3audit
 
 about:
   summary: Python bindings for rage (age in Rust)

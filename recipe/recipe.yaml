@@ -67,7 +67,6 @@ about:
   license: MIT
   license_file:
     - LICENSE
-    - pyrage-stubs/LICENSE
     - THIRDPARTY.yml
   homepage: https://github.com/woodruffw/pyrage
 

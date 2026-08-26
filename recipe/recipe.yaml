@@ -10,6 +10,9 @@ package:
 source:
   url: https://pypi.org/packages/source/p/pyrage/pyrage-${{ version }}.tar.gz
   sha256: 545bf188e8d217ec88c32bc8e8bf56026c8c0b1b1f96d2688cedf1427ab0e827
+  patches:
+    # https://github.com/woodruffw/pyrage/pull/156
+    - 0001-bump-pyo3.patch
 
 build:
   number: 2

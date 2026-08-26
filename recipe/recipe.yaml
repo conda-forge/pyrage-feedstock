@@ -52,7 +52,8 @@ tests:
       imports:
         - pyrage
       python_version:
-        - ${{ python_min }}.*
+        - if: is_abi3
+          then: ${{ python_min }}.*
         - '*'
       pip_check: true
   - if: is_abi3
